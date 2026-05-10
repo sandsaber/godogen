@@ -51,7 +51,15 @@ Pick the engine:
 ./publish.sh --engine bevy  --out ~/my-game
 ```
 
-Pass `--force` to wipe existing contents at the target before publishing.
+Flags:
+- `--force` — wipe existing contents at the target before publishing
+- `--merge` — preserve any existing custom skills in `.agents/skills/` alongside godogen skills
+
+Useful for integrating godogen into an existing project:
+
+```bash
+./publish.sh --engine godot --merge --out ~/existing-project
+```
 
 ### Bevy docs setup
 
