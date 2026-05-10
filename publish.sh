@@ -2,7 +2,7 @@
 # Publish Godogen runtime files into a target game repo.
 #
 # Usage:
-#   ./publish.sh --engine godot|bevy --out <target_dir> [--force]
+#   ./publish.sh --engine godot|bevy --out <target_dir> [--force] [--merge]
 #
 # The Stop hook is best-effort: when `tg-push` and TG_* env vars are present at runtime
 # it pushes the latest screenshots/result/{N}/video.mp4 to Telegram, otherwise it no-ops.
@@ -14,6 +14,7 @@ HELPERS="$REPO_ROOT/scripts/publish"
 ENGINE=""
 OUT=""
 FORCE=0
+MERGE=0
 
 usage() {
     sed -n '1,9p' "$0" >&2
@@ -61,6 +62,7 @@ while [ $# -gt 0 ]; do
         --engine) ENGINE="${2:-}"; shift 2 ;;
         --out)    OUT="${2:-}";    shift 2 ;;
         --force)  FORCE=1;         shift   ;;
+        --merge)  MERGE=1;         shift   ;;
         -h|--help) usage; exit 0 ;;
         -*) echo "error: unknown option $1" >&2; usage; exit 1 ;;
         *)
@@ -124,7 +126,11 @@ python3 "$HELPERS/generate_agent_metadata.py" "$TMP/skills"
 echo "Publishing $ENGINE to: $TARGET"
 
 mkdir -p "$TARGET/$SKILLS_DIR_REL"
-rsync -a --delete "$TMP/skills/" "$TARGET/$SKILLS_DIR_REL/"
+RSYNC_OPTS="-a"
+if [ "$MERGE" -eq 0 ]; then
+    RSYNC_OPTS="-a --delete"
+fi
+rsync $RSYNC_OPTS "$TMP/skills/" "$TARGET/$SKILLS_DIR_REL/"
 
 if [ "$ENGINE" = "bevy" ]; then
     link_bevy_docs "$TARGET/$SKILLS_DIR_REL/bevy-help/docs"
