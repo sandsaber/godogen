@@ -88,7 +88,7 @@ Regime: trust (bg_thresh=0.05) ← auto-selected mode + thresholds
 
 Always pass `--preview` when removing backgrounds. This generates a `_qa.png` file — the transparent result composited on a contrasting solid color (white if the original bg was dark, black if light). Read the `_qa` image to check for remnants, fringing, or missing foreground. Delete the `_qa` file after inspection.
 
-${AGENT_NAME} cannot evaluate transparency directly from the raw PNG alone — the preview is the only reliable way to visually verify the result.
+The agent cannot evaluate transparency directly from the raw PNG alone — the preview is the only reliable way to visually verify the result.
 
 ## Fixing results
 

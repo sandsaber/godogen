@@ -2,8 +2,7 @@
 # Publish Godogen runtime files into a target game repo.
 #
 # Usage:
-#   ./publish.sh --engine godot|bevy --agent claude|codex --out <target_dir> [--force]
-#   ./publish.sh --engine godot|bevy --agent claude|codex <target_dir> [--force]
+#   ./publish.sh --engine godot|bevy --out <target_dir> [--force]
 #
 # The Stop hook is best-effort: when `tg-push` and TG_* env vars are present at runtime
 # it pushes the latest screenshots/result/{N}/video.mp4 to Telegram, otherwise it no-ops.
@@ -13,7 +12,6 @@ REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 HELPERS="$REPO_ROOT/scripts/publish"
 
 ENGINE=""
-AGENT=""
 OUT=""
 FORCE=0
 
@@ -61,7 +59,6 @@ link_bevy_docs() {
 while [ $# -gt 0 ]; do
     case "$1" in
         --engine) ENGINE="${2:-}"; shift 2 ;;
-        --agent)  AGENT="${2:-}";  shift 2 ;;
         --out)    OUT="${2:-}";    shift 2 ;;
         --force)  FORCE=1;         shift   ;;
         -h|--help) usage; exit 0 ;;
@@ -82,33 +79,15 @@ case "$ENGINE" in
     *) echo "error: --engine must be godot or bevy" >&2; usage; exit 1 ;;
 esac
 
-case "$AGENT" in
-    claude)
-        MANIFEST="CLAUDE.md"
-        SKILLS_DIR_REL=".claude/skills"
-        HOOK_CONFIG_DIR=".claude"
-        AGENT_NAME="Claude"
-        GODOGEN_COMMAND="/godogen"
-        GODOT_API_COMMAND="/godot-api"
-        BEVY_HELP_COMMAND="/bevy-help"
-        ;;
-    codex)
-        MANIFEST="AGENTS.md"
-        SKILLS_DIR_REL=".agents/skills"
-        HOOK_CONFIG_DIR=".codex"
-        AGENT_NAME="Codex"
-        GODOGEN_COMMAND="\$godogen"
-        GODOT_API_COMMAND="\$godot-api"
-        BEVY_HELP_COMMAND="\$bevy-help"
-        ;;
-    *) echo "error: --agent must be claude or codex" >&2; usage; exit 1 ;;
-esac
-
 if [ -z "$OUT" ]; then
     echo "error: --out <target_dir> is required" >&2
     usage
     exit 1
 fi
+
+MANIFEST="AGENTS.md"
+SKILLS_DIR_REL=".agents/skills"
+HOOK_CONFIG_DIR=".agents"
 
 TARGET="$(cd "$OUT" 2>/dev/null && pwd || (mkdir -p "$OUT" && cd "$OUT" && pwd))"
 
@@ -134,27 +113,15 @@ else
 fi
 
 python3 "$HELPERS/render_dir.py" "$TMP" \
-    "AGENT_ID=$AGENT" \
-    "AGENT_NAME=$AGENT_NAME" \
     "SKILLS_DIR=$SKILLS_DIR_REL" \
     "GODOGEN_SKILL_DIR=$SKILLS_DIR_REL/godogen" \
     "GODOT_API_SKILL_DIR=$SKILLS_DIR_REL/godot-api" \
     "BEVY_HELP_SKILL_DIR=$SKILLS_DIR_REL/bevy-help" \
-    "HOOK_CONFIG_DIR=$HOOK_CONFIG_DIR" \
-    "ENGINE_NAME=${ENGINE^}" \
-    "GODOGEN_COMMAND=$GODOGEN_COMMAND" \
-    "GODOT_API_COMMAND=$GODOT_API_COMMAND" \
-    "BEVY_HELP_COMMAND=$BEVY_HELP_COMMAND"
+    "ENGINE_NAME=${ENGINE^}"
 
-if [ "$AGENT" = "codex" ]; then
-    python3 "$HELPERS/generate_codex_metadata.py" "$TMP/skills"
-elif [ "$ENGINE" = "godot" ]; then
-    python3 "$HELPERS/inject_claude_lookup_frontmatter.py" "$TMP/skills/godot-api/SKILL.md"
-else
-    python3 "$HELPERS/inject_claude_lookup_frontmatter.py" "$TMP/skills/bevy-help/SKILL.md"
-fi
+python3 "$HELPERS/generate_agent_metadata.py" "$TMP/skills"
 
-echo "Publishing $ENGINE/$AGENT to: $TARGET"
+echo "Publishing $ENGINE to: $TARGET"
 
 mkdir -p "$TARGET/$SKILLS_DIR_REL"
 rsync -a --delete "$TMP/skills/" "$TARGET/$SKILLS_DIR_REL/"
@@ -166,9 +133,7 @@ fi
 
 mkdir -p "$TMP/game"
 cp "$REPO_ROOT/$ENGINE/game-engine.md" "$TMP/game/game-engine.md"
-python3 "$HELPERS/render_dir.py" "$TMP/game" \
-    "AGENT_NAME=$AGENT_NAME" \
-    "GODOGEN_COMMAND=$GODOGEN_COMMAND"
+python3 "$HELPERS/render_dir.py" "$TMP/game"
 cp "$TMP/game/game-engine.md" "$TARGET/$MANIFEST"
 echo "Created $MANIFEST"
 
@@ -177,33 +142,13 @@ rsync -a "$REPO_ROOT/shared/hooks/stop_post_task_gate.py" \
     "$TARGET/$HOOK_CONFIG_DIR/hooks/"
 rsync -a "$REPO_ROOT/$ENGINE/hooks/" "$TARGET/$HOOK_CONFIG_DIR/hooks/"
 python3 "$HELPERS/render_dir.py" "$TARGET/$HOOK_CONFIG_DIR/hooks" \
-    "AGENT_ID=$AGENT" \
-    "AGENT_NAME=$AGENT_NAME" \
     "HOOK_CONFIG_DIR=$HOOK_CONFIG_DIR" \
     "ENGINE_NAME=${ENGINE^}"
 chmod +x "$TARGET/$HOOK_CONFIG_DIR/hooks/stop_post_task_gate.py" "$TARGET/$HOOK_CONFIG_DIR/hooks/capture_result.sh"
 
-if [ "$AGENT" = "codex" ]; then
-    cp "$REPO_ROOT/shared/hooks/hooks.json" "$TARGET/$HOOK_CONFIG_DIR/hooks.json"
-    python3 "$HELPERS/render_dir.py" "$TARGET/$HOOK_CONFIG_DIR" \
-        "AGENT_ID=$AGENT" \
-        "AGENT_NAME=$AGENT_NAME" \
-        "HOOK_CONFIG_DIR=$HOOK_CONFIG_DIR" \
-        "ENGINE_NAME=${ENGINE^}"
-    python3 "$HELPERS/ensure_codex_hooks_feature.py" "$TARGET/$HOOK_CONFIG_DIR/config.toml"
-    echo "Installed Codex stop hook"
-else
-    python3 "$HELPERS/merge_claude_stop_hook.py" "$TARGET/$HOOK_CONFIG_DIR/settings.json"
-    echo "Installed Claude Code stop hook"
-fi
-
 if [ ! -f "$TARGET/.gitignore" ]; then
     {
-        if [ "$AGENT" = "claude" ]; then
-            printf '.claude\nCLAUDE.md\n'
-        else
-            printf '.agents\nAGENTS.md\n.codex\n'
-        fi
+        printf '.agents\nAGENTS.md\n'
         if [ "$ENGINE" = "godot" ]; then
             printf 'assets\nscreenshots\n.godot\n*.import\nbin/\nobj/\n'
         else

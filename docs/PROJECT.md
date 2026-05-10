@@ -2,7 +2,7 @@
 
 Godogen is an autonomous development pipeline for turning a natural-language game brief into a playable Godot or Bevy project. It plans the game, generates visual direction and assets, writes code, and captures media from the running engine for visual review.
 
-It is not a game engine, a code generator, or an asset marketplace. It is a source repo for runtime skills that are published into a fresh game repo and then executed by Claude Code or Codex.
+It is not a game engine, a code generator, or an asset marketplace. It is a source repo for runtime skills that are published into a fresh game repo and then executed by any coding agent.
 
 ## Source Model
 
@@ -12,16 +12,14 @@ The repo is organized by engine:
 - `godot/` — Godot-specific `godogen` stages and `godot-api`
 - `bevy/` — Bevy-specific `godogen` stages and `bevy-help`
 
-Claude Code vs Codex is selected at render time:
+Publishing is agent-agnostic:
 
 ```bash
-./publish.sh --engine godot --agent claude --out ~/game
-./publish.sh --engine godot --agent codex --out ~/game
-./publish.sh --engine bevy --agent claude --out ~/game
-./publish.sh --engine bevy --agent codex --out ~/game
+./publish.sh --engine godot --out ~/game
+./publish.sh --engine bevy  --out ~/game
 ```
 
-Publishing writes `CLAUDE.md` plus `.claude/skills/` for Claude Code, or `AGENTS.md` plus `.agents/skills/` for Codex. Codex `agents/openai.yaml` files are generated from each rendered `SKILL.md` frontmatter.
+Publishing writes `AGENTS.md` plus `.agents/skills/` with `agents/metadata.yaml` generated from each skill's `SKILL.md` frontmatter. Works with any coding agent.
 
 ## Pipeline
 
@@ -30,10 +28,10 @@ The `godogen` skill orchestrates the run and loads stage-specific files only whe
 1. **Visual target** — generate `reference.png` and write art direction into `ASSETS.md`.
 2. **Decomposition** — write `PLAN.md`, isolating only genuinely risky features.
 3. **Scaffold** — create or update the engine project shell and `STRUCTURE.md`.
-4. **Asset planning and generation** — spend the user-provided budget on the assets that matter most.
+4. **Asset planning and generation** — spend the user-provided budget on the assets that matter most via Meshy AI.
 5. **Task execution** — implement risk slices first, then the main build.
 6. **Capture** — create a fresh `screenshots/result/{N}/` bundle with raw `frameXXX.png` files and `video.mp4`.
-7. **Telegram push** — the shared stop hook pushes the latest proof video to Telegram when `tg-push` and `TG_*` env vars are configured; otherwise it no-ops.
+7. **Telegram push** — the shared stop hook pushes the latest proof video to Telegram when configured; otherwise it no-ops.
 
 The document protocol is deliberate. `PLAN.md`, `STRUCTURE.md`, `ASSETS.md`, and `MEMORY.md` survive context compaction and let the run resume from files instead of conversational memory.
 
@@ -51,9 +49,9 @@ Both engines share the same final-bundle contract: the latest numeric `screensho
 
 **Progressive loading.** The orchestrator reads only the stage file it needs at the moment. Support skills keep large engine references out of the main context.
 
-**Budget-aware asset generation.** Gemini, Grok, and Tripo3D are used where they make economic sense, and generated assets are assigned back into `PLAN.md` so implementation does not lose them.
+**Budget-aware asset generation.** Meshy AI provides images, 3D models, rigging, and animation with consistent art styles. Generated assets are assigned back into `PLAN.md`.
 
-**Engine-specific expertise without agent duplication.** Godot and Bevy are different enough to keep their engine docs separate. Claude and Codex are similar enough to render from one source.
+**Agent-agnostic.** Published repos work with any coding agent — Claude Code, Codex, Cursor, OpenCode, Cline, and others.
 
 ## Runtime Limitations
 

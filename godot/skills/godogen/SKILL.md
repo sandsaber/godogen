@@ -2,9 +2,9 @@
 name: godogen
 display_name: Godogen
 short_description: Generate or update complete Godot games
-default_prompt: "Use ${GODOGEN_COMMAND} to build or update this Godot game from a natural-language design brief."
+default_prompt: "Use godogen to build or update this Godot game from a natural-language design brief."
 description: |
-  Generate or update a complete Godot game from a natural-language description. Use when the user wants ${AGENT_NAME} to make, rebuild, or substantially extend a Godot project end to end.
+  Generate or update a complete Godot game from a natural-language description. Use when the user wants to make, rebuild, or substantially extend a Godot project end to end.
 ---
 
 # Game Generator — Orchestrator
@@ -52,17 +52,17 @@ User request
     +- Execute (see Execution below)
     |
     +- If final presentation media is required:
-    |   +- Read test-harness.md and capture.md, produce a fresh screenshots/result/{N}/ bundle with raw frames and video.mp4
+    |   +- Read test-harness.md and capture.md, produce a fresh screenshots/result/{N}/ bundle
     |
     +- If user requested Android app:
-    |   +- Read android-build.md, add ETC2/ASTC to project.godot, create export_presets.cfg, export APK
+    |   +- Read android-build.md, export APK
     |
     +- Summary of completed game
 ```
 
 ## Assets
 
-**If a budget is provided, generating proper assets is part of the task, not optional.** Do not fall back to procedural primitives (boxes stacked into a human, spheres for heads, coloured quads for props) when the budget allows a real asset — plan and generate the asset through `asset-planner.md` / `asset-gen.md`. Procedural stand-ins are acceptable only for genuinely abstract shapes (platforms, blocks, particles) or when the asset-planner has explicitly ruled an asset out on budget grounds.
+**If a budget is provided, generating proper assets is part of the task, not optional.** Do not fall back to procedural primitives when the budget allows a real asset — plan and generate through `asset-planner.md` / `asset-gen.md`. Procedural stand-ins are acceptable only for genuinely abstract shapes or when explicitly ruled out on budget grounds.
 
 Placeholder primitives in gameplay code are a signal that the asset step was skipped — go back and generate the asset before continuing.
 
@@ -73,13 +73,11 @@ Read `task-execution.md` before starting. Two phases:
 1. **Risk tasks** (if any) — implement each in isolation, verify, commit
 2. **Main build** — implement everything else, verify, present results, commit
 
-If `PLAN.md` calls for presentation media, finish through the Godot test harness and capture flow in `test-harness.md` / `capture.md` and leave a fresh `screenshots/result/{N}/` proof bundle behind.
+If `PLAN.md` calls for presentation media, finish through the Godot test harness and capture flow and leave a fresh `screenshots/result/{N}/` proof bundle behind.
 
 ## Godot API Lookup
 
 When you need to look up a Godot class API or C# Godot pattern, use the `godot-api` skill with a targeted query. It keeps large API docs out of the main pipeline.
-
-Use the skill inline when you already know what class or symbol to inspect and can answer by searching `_common.md` / `_other.md` plus reading a small number of specific docs. Use a dedicated helper agent when you need to discover candidate classes, compare several classes, or read multiple or large docs and reduce them to a compact answer.
 
 Be specific about what you need:
 
@@ -88,7 +86,7 @@ Be specific about what you need:
 
 ## Context Hygiene
 
-Keep important state in files so the pipeline can resume cleanly after long threads or compaction:
+Keep important state in files so the pipeline can resume cleanly:
 
 - **PLAN.md** — task statuses and verification criteria
 - **STRUCTURE.md** — architecture reference

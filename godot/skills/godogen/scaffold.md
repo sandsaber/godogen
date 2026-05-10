@@ -29,7 +29,7 @@ Works for both fresh projects and incremental changes (adding scenes/scripts, re
 13. **Import assets** — `timeout 60 godot --headless --import 2>&1`. If Godot fails here because `project.godot` has the wrong `config_version` or incompatible engine keys, fix the project file before proceeding.
 14. **Build scene stubs** — for each new/changed scene, write a scene builder script to `scenes/BuildXxx.cs`, then run in dependency order (leaf scenes first): `timeout 60 godot --headless --script scenes/BuildXxx.cs`
 15. **Verify** — `timeout 60 godot --headless --quit 2>&1`. No `ERROR` lines. RID warnings are benign.
-16. **Git commit** — repo is already initialized before ${AGENT_NAME} starts:
+16. **Git commit** — repo is already initialized:
     ```bash
     git add -A && git commit -m "scaffold: project skeleton"
     ```

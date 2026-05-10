@@ -32,7 +32,7 @@ Use this for both fresh projects and scaffold-level refactors.
       - headless workstation or CI -> `timeout 10 xvfb-run ./target/debug/{package-name}`
       - screenshot/video automation -> add a dedicated offscreen capture binary later; do not reuse the interactive window path as the media pipeline
     The headless smoke test only needs to prove that the app launches without immediate runtime errors. A timeout after the window loop starts is acceptable.
-15. **Git commit** — repo is already initialized before ${AGENT_NAME} starts:
+15. **Git commit** — repo is already initialized:
     ```bash
     git add -A && git commit -m "scaffold: bevy project skeleton"
     ```

@@ -1,1 +1,1 @@
-Use ${GODOGEN_COMMAND} to generate or update this Godot game from a natural language description.
+Use godogen to generate or update this Godot game from a natural language description.

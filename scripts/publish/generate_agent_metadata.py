@@ -1,4 +1,8 @@
-"""Write each skill's agents/openai.yaml from its SKILL.md frontmatter."""
+"""Write each skill's agents/metadata.yaml from its SKILL.md frontmatter.
+
+Agent-agnostic: works with any coding agent that reads YAML metadata
+(Cursor, Codex, Claude Code, OpenCode, Cline, etc.).
+"""
 
 from __future__ import annotations
 
@@ -50,7 +54,7 @@ def title_from_name(name: str) -> str:
     return " ".join(part.capitalize() for part in re.split(r"[-_]+", name) if part)
 
 
-def write_openai_yaml(skill_dir: Path) -> None:
+def write_metadata_yaml(skill_dir: Path) -> None:
     skill_file = skill_dir / "SKILL.md"
     if not skill_file.is_file():
         return
@@ -78,17 +82,17 @@ def write_openai_yaml(skill_dir: Path) -> None:
 
     agents_dir = skill_dir / "agents"
     agents_dir.mkdir(parents=True, exist_ok=True)
-    (agents_dir / "openai.yaml").write_text("\n".join(lines) + "\n")
+    (agents_dir / "metadata.yaml").write_text("\n".join(lines) + "\n")
 
 
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
-        print("usage: generate_codex_metadata.py <skills_root>", file=sys.stderr)
+        print("usage: generate_agent_metadata.py <skills_root>", file=sys.stderr)
         return 2
 
     skills_root = Path(argv[1])
     for skill_dir in sorted(p for p in skills_root.iterdir() if p.is_dir()):
-        write_openai_yaml(skill_dir)
+        write_metadata_yaml(skill_dir)
     return 0
 
 

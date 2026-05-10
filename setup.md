@@ -1,6 +1,6 @@
 # Workstation Setup
 
-Shared workstation setup for the consolidated Godogen source repo.
+Shared workstation setup for the Godogen source repo.
 
 ## Bevy Docs Cache
 
@@ -16,10 +16,6 @@ This script:
 - creates shallow `bevy` and `bevy-website` checkouts for new caches, or updates existing checkouts
 - builds local rustdoc for the current stable Bevy release
 - removes temporary Cargo build artifacts after rustdoc is copied
-
-No default path is assumed. Pick a writable folder on your machine. Published Bevy game repos reuse the source repo's configured docs symlinks.
-
-The default cache is roughly 2 GB. Pass `--keep-target` if you want faster repeated rustdoc rebuilds and can spare several more GB for Cargo build artifacts.
 
 ## .NET 9 SDK
 
@@ -80,15 +76,9 @@ Requires Python 3.10+.
 ```bash
 python3 --version
 pip install -r shared/skills/godogen/tools/requirements.txt
-pip install google-genai
 ```
 
-In a published game repo, the same asset-generation requirements file lives at:
-
-- `.claude/skills/godogen/tools/requirements.txt` for Claude Code
-- `.agents/skills/godogen/tools/requirements.txt` for Codex
-
-`google-genai` is required by `asset_gen.py` for Gemini image generation.
+In a published game repo, the same requirements file lives at `.agents/skills/godogen/tools/requirements.txt`.
 
 ## Godot (.NET edition)
 
@@ -160,8 +150,6 @@ sudo /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/opt/androi
 
 ### Export Templates
 
-Download the TPZ matching your Godot version and unpack:
-
 ```bash
 VERSION=$(godot --version | cut -d. -f1-3)
 TEMPLATE_DIR=~/.local/share/godot/export_templates/${VERSION}.stable
@@ -173,8 +161,6 @@ mv /tmp/tpz_extract/templates/* "$TEMPLATE_DIR/"
 ```
 
 ### Debug Keystore
-
-Generate once:
 
 ```bash
 mkdir -p ~/.local/share/godot/keystores
@@ -196,23 +182,13 @@ export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
 export/android/android_sdk_path = "/opt/android-sdk"
 ```
 
-All three keystore fields must be set together or Godot silently fails.
-
-### Verify
-
-```bash
-java -version
-/opt/android-sdk/platform-tools/adb --version
-ls ~/.local/share/godot/export_templates/*/android_debug.apk
-```
-
 ## API Keys
 
 Set in environment:
 
-- `GOOGLE_API_KEY` — Gemini image generation
-- `XAI_API_KEY` — xAI Grok image/video generation
-- `TRIPO3D_API_KEY` — image-to-3D conversion
+- `MESHY_API_KEY` — [Meshy AI](https://www.meshy.ai/) for image and 3D generation
+
+Get your key from https://www.meshy.ai/settings/api (requires Pro plan or above).
 
 ## Post-Task Telegram Push (optional)
 

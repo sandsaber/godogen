@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""${AGENT_NAME} Stop hook: push the latest proof video to Telegram.
+"""Stop hook: push the latest proof video to Telegram.
 
 Best-effort. The hook never blocks stop. It silently no-ops when `tg-push` is
 unavailable or no result bundle has been produced yet.
