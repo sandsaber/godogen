@@ -37,7 +37,7 @@ The document protocol is deliberate. `PLAN.md`, `STRUCTURE.md`, `ASSETS.md`, and
 
 ## Engine Support
 
-Godot output is a Godot 4 C#/.NET project. The Godot runtime skill uses scene builders for generated `.tscn` files, runtime scripts for gameplay, `godot-api` for targeted engine lookup, and a Godot capture helper for final proof bundles.
+Godot output defaults to a Godot 4 C#/.NET project. The Godot runtime skill also supports an explicit GDScript mode when the user requests GDScript or the existing project is already GDScript. Both modes use generated `.tscn` files, runtime scripts for gameplay, `godot-api` for targeted engine lookup, and a Godot capture helper for final proof bundles.
 
 Bevy output is a Rust/Bevy project. The Bevy runtime skill uses code-first scene construction, local Bevy rustdoc/examples through `bevy-help`, and a dedicated capture path for final proof bundles.
 

@@ -23,13 +23,20 @@ Read each stage file from `${GODOGEN_SKILL_DIR}/` only when you reach that stage
 | `asset-planner.md` | Budget and plan assets | If budget provided |
 | `asset-gen.md` | Asset generation CLI ref | When generating assets |
 | `rembg.md` | Background removal | Only when an asset needs transparency removed |
+| `gdscript-mode.md` | GDScript overrides | User requests GDScript or project is already GDScript |
 | `task-execution.md` | Task workflow + commands | Before first task |
 | `quirks.md` | Godot gotchas | Before writing code |
 | `scene-generation.md` | Scene builders | Targets include `.tscn` |
 | `test-harness.md` | SceneTree verification scripts | Before writing capture/test scripts |
 | `capture.md` | Screenshot/video capture + final result bundle | Before automated screenshots or video |
 | `android-build.md` | APK export | User requests Android |
-| *(godot-api skill)* | C# Godot syntax ref | When unsure about Godot API details |
+| *(godot-api skill)* | Godot API and C#/GDScript syntax ref | When unsure about Godot API details |
+
+## Script Language
+
+C# is the default for fresh Godot projects. Use GDScript only when the user explicitly asks for GDScript/no .NET/standard Godot, or when the existing project is already GDScript.
+
+If using GDScript, read `gdscript-mode.md` before `scaffold.md`, then apply its overrides throughout scaffold, task execution, scene generation, test harness, and capture.
 
 ## Pipeline
 
@@ -77,7 +84,7 @@ If `PLAN.md` calls for presentation media, finish through the Godot test harness
 
 ## Godot API Lookup
 
-When you need to look up a Godot class API or C# Godot pattern, use the `godot-api` skill with a targeted query. It keeps large API docs out of the main pipeline.
+When you need to look up a Godot class API, C# Godot pattern, or GDScript syntax, use the `godot-api` skill with a targeted query. It keeps large API docs out of the main pipeline.
 
 Be specific about what you need:
 

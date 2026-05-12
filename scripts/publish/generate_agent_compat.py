@@ -32,7 +32,7 @@ def generated_comment() -> str:
 def godogen_md(engine: str) -> str:
     support_skill = "godot-api" if engine == "godot" else "bevy-help"
     support_purpose = (
-        "targeted Godot class APIs or C# Godot syntax"
+        "targeted Godot class APIs, C# Godot syntax, or GDScript syntax"
         if engine == "godot"
         else "Bevy APIs, examples, or architecture help"
     )

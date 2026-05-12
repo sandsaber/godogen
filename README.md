@@ -22,11 +22,11 @@ Published game repos use `AGENTS.md` as the canonical instruction file and `.age
 
 ## What skills do
 
-- **Godot 4 output** — real C#/.NET projects with proper scene trees, scene builders, scripts, and asset organization.
+- **Godot 4 output** — real C#/.NET projects by default, with explicit GDScript mode when requested, proper scene trees, scene builders, scripts, and asset organization.
 - **Godot Android export** — debug APK export remains available when the user requests an Android app.
 - **Bevy output** — Rust/Bevy projects with code-first scenes, local Bevy docs lookup, deterministic capture guidance, and final proof bundles.
 - **Asset generation** — Meshy AI generates images, 3D models, rigged characters, and animations. Six art styles: realistic, cartoon, anime, pixel-art, voxel, clay. Background removal via BiRefNet for sprite transparency.
-- **C# / .NET 9 for Godot** — Godot output uses C#. See [why C# over GDScript](docs/gdscript-vs-csharp.md).
+- **C# / .NET 9 and GDScript for Godot** — Godot output defaults to C# for stronger compile-time checks, but can generate GDScript projects when the user requests it. See [why C# is the default](docs/gdscript-vs-csharp.md).
 - **Frame-grounded self-repair** — the agent is prompted to judge progress from captured screenshots, not from code that compiles.
 - **Telegram proof push** — published repos install a stop hook that pushes the latest `screenshots/result/{N}/video.mp4` to Telegram when `tg-push` and the TG_* env vars are configured. No-op otherwise.
 - **Cross-agent bootstrap** — published repos include `AGENTS.md`, `GODOGEN.md`, `opencode.jsonc`, `CLAUDE.md`, `GEMINI.md`, and common rule-file shims so tools that do not natively load `.agents/skills/` still find the Godogen runtime.
@@ -36,7 +36,7 @@ Published game repos use `AGENTS.md` as the canonical instruction file and `.age
 
 ### Prerequisites
 
-- [Godot 4](https://godotengine.org/download/) (.NET build) on `PATH` for Godot projects
+- [Godot 4](https://godotengine.org/download/) on `PATH`; use the .NET build for default C# Godot projects, or the standard build for GDScript-only projects
 - Rust/Cargo plus local Bevy docs for Bevy projects
 - Python 3 with pip
 - API key:

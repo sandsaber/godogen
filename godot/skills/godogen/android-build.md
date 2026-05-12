@@ -2,6 +2,8 @@
 
 Export a Godot C# (.NET) project as a debug APK for Android.
 
+This file documents the C#/.NET export path. For GDScript-only Godot projects, skip the .NET-specific build steps and use standard Godot Android export templates/settings for the installed engine version.
+
 ## Prerequisites
 
 - .NET 9 SDK — see `setup.md`

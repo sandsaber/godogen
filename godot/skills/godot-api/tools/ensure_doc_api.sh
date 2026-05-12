@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Bootstrap doc_api for godot-api skill.
-# Clones Godot docs (sparse checkout) and generates per-class C# markdown API reference.
+# Clones Godot docs (sparse checkout) and generates per-class markdown API reference.
 # Safe to re-run — skips if doc_api/ already exists.
 set -euo pipefail
 
@@ -8,6 +8,7 @@ SKILL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 TOOLS_DIR="$SKILL_DIR/tools"
 DOC_SOURCE="$SKILL_DIR/doc_source"
 DOC_API="$SKILL_DIR/doc_api"
+LANGUAGE="${GODOT_API_LANG:-csharp}"
 
 if [ -d "$DOC_API" ] && [ -f "$DOC_API/_common.md" ]; then
     exit 0
@@ -32,6 +33,6 @@ PYTHONPATH="$TOOLS_DIR" python3 "$TOOLS_DIR/godot_api_converter.py" \
     --constant-desc full \
     --include-virtual \
     --full-signals \
-    --lang csharp
+    --lang "$LANGUAGE"
 
-echo "doc_api ready at $DOC_API"
+echo "doc_api ready at $DOC_API ($LANGUAGE)"

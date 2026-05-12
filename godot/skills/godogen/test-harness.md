@@ -1,6 +1,6 @@
 # Test Harness & Visual Verification
 
-Write `test/TestXxx.cs` (e.g., `test/TestT3.cs`) — a SceneTree script that loads the scene under test and verifies the task's goal. Do NOT call `Quit()` — the movie writer handles exit.
+Write `test/TestXxx.cs` (C#) or `test/test_xxx.gd` (GDScript mode) — a SceneTree script that loads the scene under test and verifies the task's goal. Do not call `Quit()` / `quit()` from presentation scripts — the movie writer handles exit.
 
 ## SceneTree Script Contract
 
@@ -10,6 +10,8 @@ Tests must extend `SceneTree` (not Node). Key details:
 - Camera needs `_cam.Current = true` to activate
 - Must be `public partial class`
 - Must run `dotnet build` before capture
+
+In GDScript mode, use `_initialize()` and `_process(delta: float) -> bool`, set `camera.current = true`, and skip `dotnet build`. See `gdscript-mode.md`.
 
 ## Console Assertions
 

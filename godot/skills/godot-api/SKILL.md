@@ -1,11 +1,11 @@
 ---
 name: godot-api
 display_name: Godot API Lookup
-short_description: Targeted Godot class and C# API lookup
-default_prompt: "Use godot-api to answer a specific Godot API or C# Godot syntax question."
+short_description: Targeted Godot class, C#, and GDScript API lookup
+default_prompt: "Use godot-api to answer a specific Godot API, C# Godot, or GDScript syntax question."
 allow_implicit_invocation: false
 description: |
-  Look up Godot engine class APIs, methods, properties, signals, enums, or C# Godot syntax. Use when you need a targeted Godot API answer or a specific engine-class recommendation.
+  Look up Godot engine class APIs, methods, properties, signals, enums, C# Godot syntax, or GDScript syntax. Use when you need a targeted Godot API answer or a specific engine-class recommendation.
 ---
 
 # Godot API Lookup
@@ -23,7 +23,10 @@ Do not list or enumerate `${GODOT_API_SKILL_DIR}/doc_api/` or `${GODOT_API_SKILL
    - **Specific question** -> return the relevant methods, signals, or patterns with short descriptions
    - **Full API request** -> return the whole class doc summary
 
-**C# syntax reference:** `${GODOT_API_SKILL_DIR}/csharp.md` — C# Godot syntax, patterns, and recipes.
+Syntax references:
+
+- `${GODOT_API_SKILL_DIR}/csharp.md` — C# Godot syntax, patterns, and recipes
+- `${GODOT_API_SKILL_DIR}/gdscript.md` — GDScript syntax, typing, patterns, and recipes
 
 Bootstrap if `doc_api` is empty:
 

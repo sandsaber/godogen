@@ -2,16 +2,28 @@
 set -euo pipefail
 
 RESULT="${1:-screenshots/result/1}"
-SCRIPT="${2:-test/Presentation.cs}"
+SCRIPT="${2:-}"
 FRAMES="${3:-450}"
 FPS="${4:-30}"
+
+if [ -z "$SCRIPT" ]; then
+    if [ -f test/Presentation.cs ]; then
+        SCRIPT="test/Presentation.cs"
+    elif [ -f test/presentation.gd ]; then
+        SCRIPT="test/presentation.gd"
+    else
+        SCRIPT="test/Presentation.cs"
+    fi
+fi
 
 mkdir -p screenshots
 touch screenshots/.gdignore
 rm -rf "$RESULT"
 mkdir -p "$RESULT"
 
-timeout 60 dotnet build 2>&1
+if compgen -G "*.csproj" > /dev/null || { [ "${SCRIPT##*.}" = "cs" ] && [ -f "$SCRIPT" ]; }; then
+    timeout 60 dotnet build 2>&1
+fi
 
 if [ -x .capture/run_godot ]; then
     timeout 60 .capture/run_godot --headless --import 2>&1

@@ -6,6 +6,8 @@ In example commands, `{task}` is a short slug for an intermediate capture run.
 
 Working directory is the Godot project root.
 
+For GDScript projects, read `gdscript-mode.md` first and use `.gd` test scripts. The capture flow is the same except `dotnet build` is skipped and commands use `--script test/presentation.gd` or another `.gd` SceneTree script.
+
 ## Default Capture Shape
 
 - Use dedicated `SceneTree` scripts under `test/` for automated capture. Do not make gameplay scripts depend on capture-only state.

@@ -19,7 +19,7 @@ This script:
 
 ## .NET 9 SDK
 
-Godot 4.5+ requires .NET 9.
+Default Godot generation uses C#/.NET. Godot 4.5+ C# projects require .NET 9. GDScript-only projects do not need the .NET SDK.
 
 ### Linux (Ubuntu/Debian)
 
@@ -80,9 +80,9 @@ pip install -r shared/skills/godogen/tools/requirements.txt
 
 In a published game repo, the same requirements file lives at `.agents/skills/godogen/tools/requirements.txt`.
 
-## Godot (.NET edition)
+## Godot
 
-The **.NET edition** is required for Godot projects. The standard Godot build cannot run C# scripts.
+The **.NET edition** is required for default C# Godot projects. GDScript-only projects can use the standard Godot build.
 
 ### Linux
 

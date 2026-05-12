@@ -1,5 +1,7 @@
 # GDScript vs C# — Skill Instruction Comparison
 
+Godogen supports GDScript when the user requests it or when an existing Godot project already uses it. C# remains the default for fresh Godot projects because the compiler catches more mistakes before runtime and keeps autonomous repair loops tighter.
+
 ## What C# eliminated
 
 **GDScript's type inference minefield is gone.** The GDScript quirks.md had a 28-line "Type Inference Errors" section documenting `:=` footguns — `instantiate()` returns Variant, polymorphic math functions (`abs`, `clamp`, `lerp`, `min`, `max`...) return Variant, array/dict element access returns Variant. All of these silently break type inference with `:=`. This entire class of errors doesn't exist in C#.

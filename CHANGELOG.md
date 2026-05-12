@@ -1,6 +1,7 @@
 # Changelog
 
 **2026-05-12 — Cross-agent bootstrap shims**
+- Added explicit GDScript mode documentation for Godot while keeping C# as the default
 - Expanded published `AGENTS.md` templates so non-native skill loaders know to read `.agents/skills/godogen/SKILL.md`
 - Added generated compatibility shims for Claude Code, Gemini CLI, OpenCode, Cursor, Cline, Windsurf, and Continue
 - Preserved existing user-owned compatibility files when publishing into an existing project
