@@ -1,5 +1,10 @@
 # Changelog
 
+**2026-05-12 — Cross-agent bootstrap shims**
+- Expanded published `AGENTS.md` templates so non-native skill loaders know to read `.agents/skills/godogen/SKILL.md`
+- Added generated compatibility shims for Claude Code, Gemini CLI, OpenCode, Cursor, Cline, Windsurf, and Continue
+- Preserved existing user-owned compatibility files when publishing into an existing project
+
 **2026-05-10 — Universal agent support + Meshy AI**
 - Removed Claude/Codex-specific publish paths; `publish.sh` now outputs a universal agent-agnostic layout (`AGENTS.md` + `.agents/skills/`)
 - Replaced Gemini/Grok image generation and Tripo3D with Meshy AI for all image and 3D model generation
