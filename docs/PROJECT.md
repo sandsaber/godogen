@@ -19,7 +19,7 @@ Publishing is agent-agnostic:
 ./publish.sh --engine bevy  --out ~/game
 ```
 
-Publishing writes `AGENTS.md` plus `.agents/skills/` with `agents/metadata.yaml` generated from each skill's `SKILL.md` frontmatter. It also writes small compatibility shims for common AI tools, including `CLAUDE.md`, `GEMINI.md`, `opencode.jsonc`, `.cursor/rules/`, `.clinerules/`, `.windsurf/rules/`, and `.continue/rules/`.
+Publishing writes `AGENTS.md` plus `.agents/skills/` with `agents/metadata.yaml` generated from each skill's `SKILL.md` frontmatter. It also writes small compatibility shims for common AI tools, including `GODOGEN.md`, `opencode.jsonc`, `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/`, `.clinerules/`, `.windsurf/rules/`, and `.continue/rules/`.
 
 ## Pipeline
 
@@ -51,7 +51,7 @@ Both engines share the same final-bundle contract: the latest numeric `screensho
 
 **Budget-aware asset generation.** Meshy AI provides images, 3D models, rigging, and animation with consistent art styles. Generated assets are assigned back into `PLAN.md`.
 
-**Agent-agnostic.** Published repos use `AGENTS.md` as the canonical instruction file and generate compatibility shims for common coding agents. If a tool does not load `.agents/skills/` natively, the root instructions tell it to read `.agents/skills/godogen/SKILL.md` directly.
+**Agent-agnostic.** Published repos use `AGENTS.md` as the canonical instruction file and generate compatibility shims for common coding agents. If a tool does not load `.agents/skills/` natively, `GODOGEN.md` and the tool-specific shims tell it to read `.agents/skills/godogen/SKILL.md` directly.
 
 ## Runtime Limitations
 

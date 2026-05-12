@@ -4,6 +4,7 @@
 - Expanded published `AGENTS.md` templates so non-native skill loaders know to read `.agents/skills/godogen/SKILL.md`
 - Added generated compatibility shims for Claude Code, Gemini CLI, OpenCode, Cursor, Cline, Windsurf, and Continue
 - Preserved existing user-owned compatibility files when publishing into an existing project
+- Added `--agent-compat full|minimal|none`, `--dry-run`, `GODOGEN.md`, AI tool compatibility docs, and publish smoke tests
 
 **2026-05-10 — Universal agent support + Meshy AI**
 - Removed Claude/Codex-specific publish paths; `publish.sh` now outputs a universal agent-agnostic layout (`AGENTS.md` + `.agents/skills/`)

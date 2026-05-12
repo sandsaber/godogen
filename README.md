@@ -16,7 +16,7 @@ The source is organized along the engine axis:
 - `godot/` — Godot-specific `godogen` stages, Godot capture helpers, and the `godot-api` skill
 - `bevy/` — Bevy-specific `godogen` stages, Bevy capture helpers, and the `bevy-help` skill
 
-The root [publish.sh](publish.sh) renders the right runtime layout for the chosen engine. Works with any coding agent — Claude Code, Codex, Cursor, OpenCode, Cline, Gemini CLI, Windsurf, Continue, and others.
+The root [publish.sh](publish.sh) renders the right runtime layout for the chosen engine. Works with any coding agent — Claude Code, Codex, Cursor, OpenCode, Cline, Gemini CLI, Windsurf, Continue, and others. See [AI tool compatibility](docs/AI_TOOLS.md).
 
 ## What skills do
 
@@ -27,7 +27,7 @@ The root [publish.sh](publish.sh) renders the right runtime layout for the chose
 - **C# / .NET 9 for Godot** — Godot output uses C#. See [why C# over GDScript](docs/gdscript-vs-csharp.md).
 - **Frame-grounded self-repair** — the agent is prompted to judge progress from captured screenshots, not from code that compiles.
 - **Telegram proof push** — published repos install a stop hook that pushes the latest `screenshots/result/{N}/video.mp4` to Telegram when `tg-push` and the TG_* env vars are configured. No-op otherwise.
-- **Cross-agent bootstrap** — published repos include `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `opencode.jsonc`, and common rule-file shims so tools that do not natively load `.agents/skills/` still find the Godogen runtime.
+- **Cross-agent bootstrap** — published repos include `AGENTS.md`, `GODOGEN.md`, `opencode.jsonc`, `CLAUDE.md`, `GEMINI.md`, and common rule-file shims so tools that do not natively load `.agents/skills/` still find the Godogen runtime.
 - **Runs on commodity hardware** — any machine with the relevant engine toolchain, Python, and the required API key can run the pipeline.
 
 ## Getting started
@@ -55,11 +55,25 @@ Pick the engine:
 Flags:
 - `--force` — wipe existing contents at the target before publishing
 - `--merge` — preserve any existing custom skills in `.agents/skills/` alongside godogen skills
+- `--agent-compat full|minimal|none` — choose generated AI-tool bootstrap files; default is `full`
+- `--dry-run` — show what would be written without changing the target
 
 Useful for integrating godogen into an existing project:
 
 ```bash
 ./publish.sh --engine godot --merge --out ~/existing-project
+```
+
+Check publish behavior without touching the target:
+
+```bash
+./publish.sh --engine godot --merge --dry-run --out ~/existing-project
+```
+
+Run the publish smoke test after changing publish scripts:
+
+```bash
+scripts/test_publish_smoke.sh
 ```
 
 ### Bevy docs setup
