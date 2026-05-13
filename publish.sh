@@ -86,6 +86,11 @@ case "$ENGINE" in
     *) echo "error: --engine must be godot or bevy" >&2; usage; exit 1 ;;
 esac
 
+case "$ENGINE" in
+    godot) ENGINE_NAME="Godot" ;;
+    bevy) ENGINE_NAME="Bevy" ;;
+esac
+
 case "$AGENT_COMPAT" in
     full|minimal|none) ;;
     *) echo "error: --agent-compat must be full, minimal, or none" >&2; usage; exit 1 ;;
@@ -137,7 +142,7 @@ python3 "$HELPERS/render_dir.py" "$TMP" \
     "GODOGEN_SKILL_DIR=$SKILLS_DIR_REL/godogen" \
     "GODOT_API_SKILL_DIR=$SKILLS_DIR_REL/godot-api" \
     "BEVY_HELP_SKILL_DIR=$SKILLS_DIR_REL/bevy-help" \
-    "ENGINE_NAME=${ENGINE^}"
+    "ENGINE_NAME=$ENGINE_NAME"
 
 python3 "$HELPERS/generate_agent_metadata.py" "$TMP/skills"
 
@@ -195,7 +200,7 @@ else
     rsync -a "$REPO_ROOT/$ENGINE/hooks/" "$TARGET/$HOOK_CONFIG_DIR/hooks/"
     python3 "$HELPERS/render_dir.py" "$TARGET/$HOOK_CONFIG_DIR/hooks" \
         "HOOK_CONFIG_DIR=$HOOK_CONFIG_DIR" \
-        "ENGINE_NAME=${ENGINE^}"
+        "ENGINE_NAME=$ENGINE_NAME"
     chmod +x "$TARGET/$HOOK_CONFIG_DIR/hooks/stop_post_task_gate.py" "$TARGET/$HOOK_CONFIG_DIR/hooks/capture_result.sh"
 fi
 
